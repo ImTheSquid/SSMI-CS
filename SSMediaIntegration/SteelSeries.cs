@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SSMediaIntegration
@@ -39,7 +37,7 @@ namespace SSMediaIntegration
                 songTitle = songTitle.Substring(0, 11) + "...";
             }
 
-            if (artists.Length == 1)
+            if (artists.Length >= 1)
             {
                 if (artists[0].Length > 14)
                 {

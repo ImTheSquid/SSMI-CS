@@ -39,7 +39,8 @@
             // 
             // SSMIInstaller
             // 
-            this.SSMIInstaller.Description = "SteelSeries Media Integration Service";
+            this.SSMIInstaller.Description = "Integrates with various music providers and displays track information on a Steel" +
+    "Series keyboard";
             this.SSMIInstaller.DisplayName = "SSMI";
             this.SSMIInstaller.ServiceName = "SSMIService";
             this.SSMIInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;

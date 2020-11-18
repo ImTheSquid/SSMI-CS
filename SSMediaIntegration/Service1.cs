@@ -7,8 +7,6 @@ using System.Timers;
 using SpotifyAPI.Web;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
