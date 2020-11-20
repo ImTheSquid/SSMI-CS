@@ -99,15 +99,29 @@ namespace SSMediaIntegration
                     playback = spotifyClient.Player.GetCurrentPlayback();
                     playback.Wait();
                 }
-                catch (Exception exception)
+                catch (AggregateException exception)
                 {
-                    WriteLog($"Exception caught: {exception.ToString()}");
+                    if (exception.InnerException is APIUnauthorizedException && ((APIUnauthorizedException)exception.InnerException).Message.ToLower().Contains("access token expired"))
+                    {
+                        // Attempt to refresh tokens
+                        var creds = ReadOAuthCreds();
+                        var newResponse = new OAuthClient().RequestToken(
+                            new PKCETokenRefreshRequest(clientId, creds.RefreshToken)
+                        );
+                        newResponse.Wait();
+                        WriteOAuthCreds(newResponse.Result);
+                        spotifyClient = new SpotifyClient(newResponse.Result.AccessToken);
+                        return;
+                    }
+
+                    WriteLog($"Exception caught: {exception.InnerException.ToString()}");
+
                     return;
                 }
 
                 if (!playback.Result.IsPlaying || playback.Result.Device.Type.ToLower() != "computer")
                 {
-                    deadTimer++;
+                    deadTimer = Math.Min(deadTimer + 1, 5);
                 }
                 else if (playback.Result.IsPlaying && playback.Result.Device.Type.ToLower() == "computer")
                 {

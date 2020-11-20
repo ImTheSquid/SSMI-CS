@@ -13,11 +13,15 @@ namespace SSMediaIntegration
             {
                 //Install service
                 if (args[0].Trim().ToLower() == "/i")
-                { System.Configuration.Install.ManagedInstallerClass.InstallHelper(new string[] { "/i", Assembly.GetExecutingAssembly().Location }); }
+                {
+                    System.Configuration.Install.ManagedInstallerClass.InstallHelper(new string[] { "/i", Assembly.GetExecutingAssembly().Location }); 
+                }
 
                 //Uninstall service                 
                 else if (args[0].Trim().ToLower() == "/u")
-                { System.Configuration.Install.ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location }); }
+                {
+                    System.Configuration.Install.ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location }); 
+                }
             }
             else
             {
