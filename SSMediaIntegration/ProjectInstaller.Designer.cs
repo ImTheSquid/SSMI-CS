@@ -39,6 +39,7 @@
             // 
             // SSMIInstaller
             // 
+            this.SSMIInstaller.DelayedAutoStart = true;
             this.SSMIInstaller.Description = "Integrates with various music providers and displays track information on a Steel" +
     "Series keyboard";
             this.SSMIInstaller.DisplayName = "SSMI";
