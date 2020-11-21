@@ -79,7 +79,8 @@ namespace SSMIHelper
 
             if (code == null)
             {
-                Console.WriteLine("Failed to fetch code! Exiting...");
+                Console.WriteLine("Failed to fetch code! Press any key to continue...");
+                Console.ReadKey();
                 Environment.Exit(1);
             }
             Console.WriteLine("Code aquisition successful");
@@ -92,11 +93,14 @@ namespace SSMIHelper
             );
 
             WriteOAuthCreds(initialResponse);
-            Console.WriteLine("File written");
+            Console.WriteLine("Credential file written");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
 
         private static void WriteOAuthCreds(PKCETokenResponse data)
         {
+            Directory.CreateDirectory(dataPath);
             File.WriteAllText(dataPath + "\\oauth.json", JsonConvert.SerializeObject(data));
         }
     }

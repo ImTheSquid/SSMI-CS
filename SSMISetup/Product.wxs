@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Product Id="*" Name="SteelSeries Media Integration" Language="1033" Version="1.0.0.0" Manufacturer="Jack Hogan" UpgradeCode="25be82f2-4022-4843-a7d9-3c3410084ff8">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="SSMISetup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+        <Directory Id="ROOTDIRECTORY" Name="Jack Hogan">
+          <Directory Id="INSTALLFOLDER" Name="SSMI" />
+        </Directory>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+      <!-- Service -->
+      <Component Id="SSMIService" Guid="7a6fe01f-65b6-43b3-b340-4f87c2726a56">
+        <File Source="$(var.SSMediaIntegration.TargetPath)"/>
+        <ServiceInstall Name="SteelSeries Media Integration" Type="ownProcess" Start="auto" ErrorControl="normal" Description="Integrates with various music providers and displays track information on a SteelSeries keyboard">
+          <util:ServiceConfig FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" />
+        </ServiceInstall>
+      </Component>
+      <!-- Helper -->
+      <Component Id="SSMIHelper" Guid="531ea46b-3748-4e11-9c59-06ca2f966341">
+        <File Source="$(var.SSMIHelper.TargetPath)"/>
+      </Component>
+      <!-- Libraries -->
+      <!--<Component Id="Libraries" Guid="77530827-36c4-494e-ad86-feb6730af397">
+        <File Source="$(var.SSMediaIntegration.TargetDir)Newtonsoft.Json.dll"/>
+        <File Source="$(var.SSMediaIntegration.TargetDir)SpotifyAPI.Web.dll"/>
+        <File Source="$(var.SSMediaIntegration.TargetDir)System.Net.Http.Formatting.dll"/>
+      </Component>-->
+		</ComponentGroup>
+	</Fragment>
+</Wix>

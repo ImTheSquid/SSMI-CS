@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace SSMediaIntegration
 {
@@ -40,12 +41,39 @@ namespace SSMediaIntegration
         {
             InitializeComponent();
 
+            // Add assembly loader
+            AppDomain domain = AppDomain.CurrentDomain;
+            domain.AssemblyResolve += new ResolveEventHandler(LoadFromCWD);
+
             if (!EventLog.SourceExists("Application"))
             {
                 EventLog.CreateEventSource("SSMI", "Default");
             }
             eventLog.Source = "SSMI";
             eventLog.Log = "Default";
+        }
+
+        /// <summary>
+        /// Delegate for DLL loading to allow for loading DLLs from working directory instead of system directory
+        /// </summary>
+        /// <param name="sender">
+        /// Sender
+        /// </param>
+        /// <param name="args">
+        /// Loader arguments
+        /// </param>
+        /// <returns>
+        /// Assembly
+        /// </returns>
+        private static Assembly LoadFromCWD(object sender, ResolveEventArgs args)
+        {
+            string cwd = Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]);
+            string assemblyPath = Path.Combine(cwd, new AssemblyName(args.Name).Name + ".dll");
+            if (!File.Exists(assemblyPath))
+            {
+                return null;
+            }
+            return Assembly.LoadFrom(assemblyPath);
         }
 
         protected override void OnStart(string[] args)
@@ -169,10 +197,7 @@ namespace SSMediaIntegration
         private void WriteLog(string msg)
         {
             string path = dataPath + "\\logs";
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
+            Directory.CreateDirectory(path);
             string filePath = dataPath + "\\logs\\SSMI_Log_" + DateTime.Now.Date.ToShortDateString().Replace('/', '_') + ".txt";
             DateTime time = DateTime.Now.ToLocalTime();
             using (StreamWriter sw = File.AppendText(filePath))
@@ -201,6 +226,7 @@ namespace SSMediaIntegration
 
         private void WriteOAuthCreds(PKCETokenResponse data)
         {
+            Directory.CreateDirectory(dataPath);
             File.WriteAllText(dataPath + "\\oauth.json", JsonConvert.SerializeObject(data));
         }
 
