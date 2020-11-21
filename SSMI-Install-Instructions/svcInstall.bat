@@ -20,8 +20,9 @@ sc query %_ServiceName% | find "does not exist" >nul
 if %ERRORLEVEL% EQU 1 goto NOACTION
 
 :INSTALL
+cd /d %~dp0
 if not exist SSMediaIntegration.exe (
-	echo Could not find SSMediaIntegration.exe. Please access this file via cmd.
+	echo Could not find SSMediaIntegration.exe. Please make sure SSMIMediaIntegration.exe is in the same directory as svcInstall.bat.
 ) else (
 	SSMediaIntegration.exe /i
 	echo Service installed.

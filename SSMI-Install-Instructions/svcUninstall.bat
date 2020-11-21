@@ -16,12 +16,15 @@ goto check_Permissions
 
 set _ServiceName=SSMIService
 
+cd %cd%
+
 sc query %_ServiceName% | find "does not exist" >nul
 if %ERRORLEVEL% EQU 0 goto NOACTION
 
 :UNINSTALL
+cd /d %~dp0
 if not exist SSMediaIntegration.exe (
-	echo Could not find SSMediaIntegration.exe. Please access this file via cmd.
+	echo Could not find SSMediaIntegration.exe. Please make sure SSMIMediaIntegration.exe is in the same directory as svcUninstall.bat.
 ) else (
 	SSMediaIntegration.exe /u
 	echo Service uninstalled.
