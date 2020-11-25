@@ -112,7 +112,7 @@ namespace SSMediaIntegration
                 {
                     new Dictionary<string, dynamic>()
                     {
-                        { "device-type", "screened-128x40" },
+                        { "device-type", "screened" },
                         { "zone", "one" },
                         { "mode", "screen" },
                         { "datas", new dynamic[1] 
